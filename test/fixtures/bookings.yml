@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  model: one
+  photographer: one
+  status: 1
+  completed_at: 2026-09-27 00:00:12
+
+two:
+  model: two
+  photographer: two
+  status: 1
+  completed_at: 2026-09-27 00:00:12

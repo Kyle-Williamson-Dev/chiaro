@@ -1,0 +1,18 @@
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+
+  enum role: { model: 0, photographer: 1, admin: 2 }
+
+  has_many :portfolio_images, dependent: :destroy
+  has_many :bookings_as_model, class_name: "Booking", foreign_key: :model_id
+  has_many :bookings_as_photographer, class_name: "Booking", foreign_key: :photographer_id
+end
+
+def has_pending_feedback?
+  Booking.where(status: :feedback_pending)
+         .where("model_id = :id OR photographer_id = :id", id: id)
+         .any? { |b| b.feedbacks.where(author_id: id).empty? }
+end

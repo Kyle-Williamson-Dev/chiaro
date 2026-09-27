@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  booking: one
+  author: one
+  rating: 1
+  comment: MyText
+  credited_name: MyString
+
+two:
+  booking: two
+  author: two
+  rating: 1
+  comment: MyText
+  credited_name: MyString
