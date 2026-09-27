@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   enum :role, { model: 0, photographer: 1, admin: 2 }, suffix: true
 
+  before_validation :prevent_self_signup_as_admin, on: :create
+
   has_many :portfolio_images, dependent: :destroy
   has_many :bookings_as_model, class_name: "Booking", foreign_key: :model_id
   has_many :bookings_as_photographer, class_name: "Booking", foreign_key: :photographer_id
@@ -14,5 +16,11 @@ class User < ApplicationRecord
     Booking.where(status: :feedback_pending)
           .where("model_id = :id OR photographer_id = :id", id: id)
           .any? { |b| b.feedbacks.where(author_id: id).empty? }
+  end
+
+  private
+
+  def prevent_self_signup_as_admin
+    self.role = "model" if role == "admin"
   end
 end
