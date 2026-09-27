@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  enum role: { model: 0, photographer: 1, admin: 2 }
+  enum :role, { model: 0, photographer: 1, admin: 2 }, suffix: true
 
   has_many :portfolio_images, dependent: :destroy
   has_many :bookings_as_model, class_name: "Booking", foreign_key: :model_id

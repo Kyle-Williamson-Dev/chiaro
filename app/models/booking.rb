@@ -5,6 +5,15 @@ class Booking < ApplicationRecord
   belongs_to :photographer, class_name: "User"
   has_many :feedbacks, dependent: :destroy
 
+  enum :status, {
+    requested: 0,
+    confirmed: 1,
+    completed: 2,
+    feedback_pending: 3,
+    credited: 4,
+    disputed: 5
+  }
+
   aasm column: :status, enum: true do
     state :requested, initial: true
     state :confirmed
