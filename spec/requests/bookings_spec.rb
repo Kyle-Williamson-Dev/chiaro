@@ -19,9 +19,10 @@ RSpec.describe "Bookings", type: :request do
       booking = Booking.create!(model: model, photographer: photographer)
       sign_in stranger
 
-      expect {
-        get booking_path(booking)
-      }.to raise_error(Pundit::NotAuthorizedError)
+      get booking_path(booking)
+
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to eq("You're not authorized to do that.")
     end
 
     it "redirects to sign in if nobody is logged in" do
@@ -50,9 +51,10 @@ RSpec.describe "Bookings", type: :request do
 
       sign_in model
 
-      expect {
-        post bookings_path, params: { booking: { photographer_id: photographer.id } }
-      }.to raise_error(Pundit::NotAuthorizedError)
+      post bookings_path, params: { bookngs: { photogrpaher_id: photographer.id } }
+
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to eq("You're not authorized to do that.")
     end
   end
 end
