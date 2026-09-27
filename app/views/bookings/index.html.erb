@@ -1,4 +1,24 @@
-<div>
-  <h1 class="font-bold text-4xl">Bookings#index</h1>
-  <p>Find me in app/views/bookings/index.html.erb</p>
-</div>
+<h1 class="text-2xl font-bold mb-4">Your Bookings</h1>
+
+<%= link_to "Request a new booking", new_booking_path, class: "inline-block mb-6 px-4 py-2 bg-black text-white rounded" %>
+
+<% if @bookings.any? %>
+  <ul class="space-y-3">
+    <% @bookings.each do |booking| %>
+      <li class="border rounded p-4">
+        <%= link_to booking_path(booking), class: "block" do %>
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-semibold">
+                <%= booking.model.email %> &amp; <%= booking.photographer.email %>
+              </p>
+              <p class="text-sm text-gray-600">Status: <%= booking.status.humanize %></p>
+            </div>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="text-gray-600">No bookings yet.</p>
+<% end %>

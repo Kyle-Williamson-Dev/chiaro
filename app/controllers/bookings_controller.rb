@@ -36,7 +36,7 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     authorize @booking, :show?
     @booking.confirm!
-    redirect_to @boking, notice: "Booking confirmed."
+    redirect_to @booking, notice: "Booking confirmed."
   end
 
   def complete
