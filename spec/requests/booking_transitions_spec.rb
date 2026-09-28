@@ -24,6 +24,14 @@ RSpec.describe "Booking transitions", type: :request do
       post confirm_booking_path(booking)
       expect(booking.reload).to be_requested
     end
+
+    it "handles confirming an already-confirmed booking without crashing" do
+      booking.confirm!
+      sign_in photographer
+      post confirm_booking_path(booking)
+      expect(response).to redirect_to(booking_path(booking))
+      expect(flash[:alert]).to be_present
+    end
   end
 
   describe "complete" do

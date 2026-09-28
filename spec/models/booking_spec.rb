@@ -30,4 +30,13 @@ RSpec.describe Booking do
       Feedback.create!(booking: booking, author: model, rating: 4, comment: "Submitting this a second time.")
     }.to raise_error(ActiveRecord::RecordNotUnique)
   end
+
+  it "rejects a photographer who doesn't have the photographer role" do
+    model = User.create!(email: "role-m@example.com", password: "password123", role: :model)
+    other_model = User.create!(email: "role-m2@example.com", password: "password123", role: :model)
+    booking = Booking.new(model: model, photographer: other_model, requester: model)
+
+    expect(booking).not_to be_valid
+    expect(booking.errors[:photographer]).to be_present
+  end
 end

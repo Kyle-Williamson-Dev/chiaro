@@ -1,6 +1,10 @@
 class BookingsController < ApplicationController
   before_action :authenticate_user!
 
+  rescue_from AASM::InvalidTransition do
+    redirect_to @booking, alert: "That action isn't available for this booking right now."
+  end
+
   def index
     @bookings = policy_scope(Booking)
   end

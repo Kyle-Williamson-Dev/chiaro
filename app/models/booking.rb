@@ -5,6 +5,7 @@ class Booking < ApplicationRecord
   belongs_to :photographer, class_name: "User"
   belongs_to :requester, class_name: "User", optional: true
   validates :requester, presence: true, on: :create
+  validate :parties_have_correct_roles
   has_many :feedbacks, dependent: :destroy
 
   enum :status, {
@@ -52,5 +53,16 @@ class Booking < ApplicationRecord
   def both_sides_gave_feedback?
     feedbacks.where(author_id: model_id).exists? &&
       feedbacks.where(author_id: photographer_id).exists?
+  end
+
+  private
+
+  def parties_have_correct_roles
+    if model && !model.model_role?
+      errors.add(:model, "must be a model")
+    end
+    if photographer && !photographer.photographer_role?
+      errors.add(:photographer, "must be a photographer")
+    end
   end
 end
