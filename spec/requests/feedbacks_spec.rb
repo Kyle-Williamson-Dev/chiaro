@@ -7,7 +7,7 @@ RSpec.describe "Feedbacks", type: :request do
 
   describe "POST /bookings/:booking_id/feedbacks" do
     it "allows a party to post feedback while feedback is pending" do
-      booking = Booking.create!(model: model, photographer: photographer)
+      booking = Booking.create!(model: model, photographer: photographer, requester: model)
       booking.confirm!
       booking.complete!
 
@@ -22,7 +22,7 @@ RSpec.describe "Feedbacks", type: :request do
     end
 
     it "blocks someone not on the booking from posting feedback" do
-      booking = Booking.create!(model: model, photographer: photographer)
+      booking = Booking.create!(model: model, photographer: photographer, requester: model)
       booking.confirm!
       booking.complete!
 
@@ -38,7 +38,7 @@ RSpec.describe "Feedbacks", type: :request do
     end
 
     it "blocks feedback before the booking is complete" do
-      booking = Booking.create!(model: model, photographer: photographer)
+      booking = Booking.create!(model: model, photographer: photographer, requester: model)
       # still just "requested" — never confirmed or completed
 
       sign_in model
@@ -52,7 +52,7 @@ RSpec.describe "Feedbacks", type: :request do
     end
 
     it "blocks posting feedback twice from the same person" do
-      booking = Booking.create!(model: model, photographer: photographer)
+      booking = Booking.create!(model: model, photographer: photographer, requester: model)
       booking.confirm!
       booking.complete!
 
@@ -73,7 +73,7 @@ RSpec.describe "Feedbacks", type: :request do
     end
 
     it "credits the booking once both sides have posted feedback" do
-      booking = Booking.create!(model: model, photographer: photographer)
+      booking = Booking.create!(model: model, photographer: photographer, requester: model)
       booking.confirm!
       booking.complete!
 

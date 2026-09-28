@@ -4,19 +4,31 @@ class BookingPolicy < ApplicationPolicy
   end
 
   def show?
-    user == record.model || user == record.photographer
+    party?
   end
 
   def index?
     true
   end
 
+  def confirm?
+    party? && user != record.requester
+  end
+
+  def complete?
+    party?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
+      # Only bookings where the current user is the model or the photographer.
       scope.where(model_id: user.id).or(scope.where(photographer_id: user.id))
-      #This makes policy_scope(Booking) only return bookings where the current user 
-      # is either the model or the photographer. Nobody sees anyone 
-      # else's bookings in a list.
     end
+  end
+
+  private
+
+  def party?
+    user == record.model || user == record.photographer
   end
 end

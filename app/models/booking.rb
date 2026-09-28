@@ -3,6 +3,8 @@ class Booking < ApplicationRecord
 
   belongs_to :model, class_name: "User"
   belongs_to :photographer, class_name: "User"
+  belongs_to :requester, class_name: "User", optional: true
+  validates :requester, presence: true, on: :create
   has_many :feedbacks, dependent: :destroy
 
   enum :status, {

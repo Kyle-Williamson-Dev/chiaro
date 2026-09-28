@@ -7,11 +7,13 @@
 </div>
 
 <div class="flex gap-3 mb-6">
-  <% if @booking.may_confirm? %>
+  <% if @booking.may_confirm? && policy(@booking).confirm? %>
     <%= button_to "Confirm Booking", confirm_booking_path(@booking), method: :post, class: "px-4 py-2 bg-black text-white rounded" %>
+  <% elsif @booking.may_confirm? %>
+    <p class="text-gray-600">Waiting for the other party to confirm.</p>
   <% end %>
 
-  <% if @booking.may_complete? %>
+  <% if @booking.may_complete? && policy(@booking).complete? %>
     <%= button_to "Mark as Complete", complete_booking_path(@booking), method: :post, class: "px-4 py-2 bg-black text-white rounded" %>
   <% end %>
 </div>

@@ -4,7 +4,7 @@ RSpec.describe User do
   it "has pending feedback until they post their side" do
     model = User.create!(email: "m2@example.com", password: "password123", role: :model)
     photographer = User.create!(email: "p2@example.com", password: "password123", role: :photographer)
-    booking = Booking.create!(model: model, photographer: photographer)
+    booking = Booking.create!(model: model, photographer: photographer, requester: model)
     booking.confirm!
     booking.complete!
 

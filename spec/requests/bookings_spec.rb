@@ -7,7 +7,7 @@ RSpec.describe "Bookings", type: :request do
 
   describe "GET /bookings/:id" do
     it "allows a party to the booking to view it" do
-      booking = Booking.create!(model: model, photographer: photographer)
+      booking = Booking.create!(model: model, photographer: photographer, requester: model)
       sign_in model
 
       get booking_path(booking)
@@ -16,7 +16,7 @@ RSpec.describe "Bookings", type: :request do
     end
 
     it "blocks someone not on the booking" do
-      booking = Booking.create!(model: model, photographer: photographer)
+      booking = Booking.create!(model: model, photographer: photographer, requester: model)
       sign_in stranger
 
       get booking_path(booking)
@@ -26,7 +26,7 @@ RSpec.describe "Bookings", type: :request do
     end
 
     it "redirects to sign in if nobody is logged in" do
-      booking = Booking.create!(model: model, photographer: photographer)
+      booking = Booking.create!(model: model, photographer: photographer, requester: model)
 
       get booking_path(booking)
 
@@ -44,7 +44,7 @@ RSpec.describe "Bookings", type: :request do
     end
 
     it "blocks a new booking if the user has pending feedback" do
-      old_booking = Booking.create!(model: model, photographer: photographer)
+      old_booking = Booking.create!(model: model, photographer: photographer, requester: model)
       old_booking.confirm!
       old_booking.complete!
       # model has NOT posted feedback yet, so has_pending_feedback? is true

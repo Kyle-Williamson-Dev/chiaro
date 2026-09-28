@@ -5,11 +5,13 @@ class Feedback < ApplicationRecord
   validates :rating, presence: true, inclusion: { in: 1..5 }
   validates :comment, presence: true, length: { minimum: 10 }
 
-  after_create :try_advance_booking
+  after_create_commit :try_advance_booking
 
   private
 
   def try_advance_booking
-    booking.credit! if booking.may_credit?
+    booking.with_lock do
+      booking.credit! if booking.may_credit?
+    end
   end
 end

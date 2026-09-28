@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_27_061050) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_27_235741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,8 +49,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_061050) do
     t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "requester_id"
     t.index ["model_id"], name: "index_bookings_on_model_id"
     t.index ["photographer_id"], name: "index_bookings_on_photographer_id"
+    t.index ["requester_id"], name: "index_bookings_on_requester_id"
   end
 
   create_table "feedbacks", force: :cascade do |t|
@@ -62,6 +64,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_061050) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_feedbacks_on_author_id"
+    t.index ["booking_id", "author_id"], name: "index_feedbacks_on_booking_id_and_author_id", unique: true
     t.index ["booking_id"], name: "index_feedbacks_on_booking_id"
   end
 
@@ -83,6 +86,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_061050) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookings", "users", column: "model_id"
   add_foreign_key "bookings", "users", column: "photographer_id"
+  add_foreign_key "bookings", "users", column: "requester_id"
   add_foreign_key "feedbacks", "bookings"
   add_foreign_key "feedbacks", "users", column: "author_id"
 end

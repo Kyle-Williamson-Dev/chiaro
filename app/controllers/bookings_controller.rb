@@ -25,6 +25,8 @@ class BookingsController < ApplicationController
       @booking.model = current_user
     end
 
+    @booking.requester = current_user
+    
     if @booking.save
       redirect_to @booking, notice: "Booking requested."
     else
@@ -34,14 +36,14 @@ class BookingsController < ApplicationController
 
   def confirm
     @booking = Booking.find(params[:id])
-    authorize @booking, :show?
+    authorize @booking
     @booking.confirm!
     redirect_to @booking, notice: "Booking confirmed."
   end
 
   def complete
     @booking = Booking.find(params[:id])
-    authorize @booking, :show?
+    authorize @booking
     @booking.complete!
     redirect_to @booking, notice: "Booking marked complete. Feedback is now required from both sides."
   end
