@@ -53,8 +53,23 @@ RSpec.describe "Bookings", type: :request do
 
       post bookings_path, params: { bookngs: { photogrpaher_id: photographer.id } }
 
-      expect(response).to redirect_to(root_path)
-      expect(flash[:alert]).to eq("You're not authorized to do that.")
+      expect(response).to redirect_to(new_booking_feedback_path(old_booking))
+      expect(flash[:alert]).to include("Leave feedback")
+    end
+  end
+    describe "pending feedback gate" do
+    it "sends the user to the feedback form for the booking they owe" do
+      model = User.create!(email: "gate-m@example.com", password: "password123", role: :model)
+      photographer = User.create!(email: "gate-p@example.com", password: "password123", role: :photographer)
+      booking = Booking.create!(model: model, photographer: photographer, requester: model)
+      booking.confirm!
+      booking.complete!
+
+      sign_in model
+      get new_booking_path
+
+      expect(response).to redirect_to(new_booking_feedback_path(booking))
+      expect(flash[:alert]).to include(photographer.email)
     end
   end
 end

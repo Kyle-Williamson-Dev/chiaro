@@ -1,5 +1,6 @@
 class BookingsController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_feedback_first, only: [:new, :create]
 
   rescue_from AASM::InvalidTransition do
     redirect_to @booking, alert: "That action isn't available for this booking right now."
@@ -53,6 +54,15 @@ class BookingsController < ApplicationController
   end
 
   private
+
+  def require_feedback_first
+    pending = current_user.bookings_awaiting_feedback.first
+    return unless pending
+
+    other = pending.model == current_user ? pending.photographer : pending.model
+    redirect_to new_booking_feedback_path(pending),
+      alert: "Leave feedback for your session with #{other.email} to book again."
+  end
 
   def booking_params
     params.require(:booking).permit(:model_id, :photographer_id)
