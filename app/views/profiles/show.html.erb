@@ -1,0 +1,68 @@
+<div class="max-w-3xl mx-auto p-6 space-y-8">
+  <div class="flex items-center gap-6">
+    <% if @profile.avatar.attached? %>
+      <%= image_tag @profile.avatar.variant(resize_to_fill: [128, 128]), class: "rounded-full" %>
+    <% else %>
+      <div class="w-32 h-32 rounded-full bg-stone-200"></div>
+    <% end %>
+    <div>
+      <h1 class="text-3xl font-semibold"><%= @profile.display_name %></h1>
+      <p class="text-stone-500">
+        <%= @profile.user.role.humanize %><%= " · #{@profile.city}" if @profile.city.present? %>
+      </p>
+      <% if @profile.instagram.present? %>
+        <p class="text-sm">@<%= @profile.instagram.delete_prefix("@") %></p>
+      <% end %>
+      <% if policy(@profile).update? %>
+        <%= link_to "Edit profile", edit_my_profile_path, class: "text-sm underline" %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @profile.bio.present? %>
+    <section><%= simple_format @profile.bio %></section>
+  <% end %>
+
+  <% if @profile.shoot_types.any? %>
+    <section>
+      <h2 class="font-semibold mb-2">Shoot types</h2>
+      <div class="flex flex-wrap gap-2">
+        <% @profile.shoot_types.each do |t| %>
+          <span class="px-3 py-1 rounded-full bg-rose-100 text-sm"><%= t.humanize %></span>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <% if @profile.boundaries.present? %>
+    <section>
+      <h2 class="font-semibold mb-2">Boundaries</h2>
+      <%= simple_format @profile.boundaries %>
+    </section>
+  <% end %>
+
+  <% if @profile.portfolio_images.attached? %>
+    <section class="grid grid-cols-2 md:grid-cols-3 gap-2">
+      <% @profile.portfolio_images.each do |img| %>
+        <%= image_tag img.variant(resize_to_limit: [600, 600]), class: "w-full object-cover" %>
+      <% end %>
+    </section>
+  <% end %>
+
+  <section>
+    <h2 class="font-semibold mb-2">Credits (<%= @credits.size %>)</h2>
+    <% if @credits.any? %>
+      <ul class="space-y-1">
+        <% @credits.each do |b| %>
+          <% other = b.model_id == @profile.user_id ? b.photographer : b.model %>
+          <li>
+            <%= link_to other.profile.display_name, profile_path(other.profile), class: "underline" %>
+            <span class="text-stone-500 text-sm">· <%= b.updated_at.to_date.to_fs(:long) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-stone-500">No credited sessions yet.</p>
+    <% end %>
+  </section>
+</div>

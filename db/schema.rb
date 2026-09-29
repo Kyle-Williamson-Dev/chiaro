@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_27_235741) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_29_033113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -68,6 +68,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_235741) do
     t.index ["booking_id"], name: "index_feedbacks_on_booking_id"
   end
 
+  create_table "profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "display_name", null: false
+    t.text "bio"
+    t.string "city"
+    t.string "instagram"
+    t.text "boundaries"
+    t.string "shoot_types", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_profiles_on_user_id", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.integer "role", default: 0, null: false
     t.string "city"
@@ -89,4 +102,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_235741) do
   add_foreign_key "bookings", "users", column: "requester_id"
   add_foreign_key "feedbacks", "bookings"
   add_foreign_key "feedbacks", "users", column: "author_id"
+  add_foreign_key "profiles", "users"
 end

@@ -7,7 +7,7 @@ class BookingsController < ApplicationController
   end
 
   def index
-    @bookings = policy_scope(Booking)
+    @bookings = policy_scope(Booking).includes(model: :profile, photographer: :profile)
   end
 
   def show

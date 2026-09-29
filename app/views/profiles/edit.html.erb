@@ -1,0 +1,56 @@
+<div class="max-w-xl mx-auto p-6">
+  <h1 class="text-2xl font-semibold mb-6">Edit profile</h1>
+
+  <% if @profile.errors.any? %>
+    <div class="mb-4 p-3 bg-red-50 text-red-700 rounded">
+      <% @profile.errors.full_messages.each do |msg| %><p><%= msg %></p><% end %>
+    </div>
+  <% end %>
+
+  <%= form_with model: @profile, url: my_profile_path, method: :patch, class: "space-y-4" do |f| %>
+    <div>
+      <%= f.label :display_name, class: "block font-medium" %>
+      <%= f.text_field :display_name, class: "w-full border rounded p-2" %>
+    </div>
+
+    <div>
+      <%= f.label :city, class: "block font-medium" %>
+      <%= f.text_field :city, class: "w-full border rounded p-2" %>
+    </div>
+
+    <div>
+      <%= f.label :instagram, "Instagram handle", class: "block font-medium" %>
+      <%= f.text_field :instagram, class: "w-full border rounded p-2" %>
+    </div>
+
+    <div>
+      <%= f.label :bio, class: "block font-medium" %>
+      <%= f.text_area :bio, rows: 5, class: "w-full border rounded p-2" %>
+    </div>
+
+    <div>
+      <span class="block font-medium mb-1">Shoot types</span>
+      <%= f.collection_check_boxes :shoot_types, Profile::SHOOT_TYPES, :itself, :humanize do |b| %>
+        <label class="inline-flex items-center gap-1 mr-4"><%= b.check_box %> <%= b.text %></label>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :boundaries, class: "block font-medium" %>
+      <%= f.text_area :boundaries, rows: 4, class: "w-full border rounded p-2",
+            placeholder: "What you will and won't shoot, comfort levels, chaperone policy…" %>
+    </div>
+
+    <div>
+      <%= f.label :avatar, class: "block font-medium" %>
+      <%= f.file_field :avatar, accept: "image/*" %>
+    </div>
+
+    <div>
+      <%= f.label :portfolio_images, "Add portfolio images", class: "block font-medium" %>
+      <%= f.file_field :portfolio_images, multiple: true, accept: "image/*" %>
+    </div>
+
+    <%= f.submit "Save profile", class: "px-4 py-2 bg-stone-900 text-white rounded cursor-pointer" %>
+  <% end %>
+</div>

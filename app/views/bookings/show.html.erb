@@ -1,8 +1,10 @@
 <h1 class="text-2xl font-bold mb-2">Booking Details</h1>
 
 <div class="border rounded p-4 mb-6">
-  <p><span class="font-semibold">Model:</span> <%= @booking.model.email %></p>
-  <p><span class="font-semibold">Photographer:</span> <%= @booking.photographer.email %></p>
+  <p><span class="font-semibold">Model:</span>
+    <%= link_to @booking.model.profile.display_name, profile_path(@booking.model.profile), class: "underline" %></p>
+  <p><span class="font-semibold">Photographer:</span>
+    <%= link_to @booking.photographer.profile.display_name, profile_path(@booking.photographer.profile), class: "underline" %></p>
   <p><span class="font-semibold">Status:</span> <%= @booking.status.humanize %></p>
 </div>
 
@@ -32,7 +34,9 @@
   <ul class="space-y-2">
     <% @booking.feedbacks.each do |fb| %>
       <li class="border rounded p-3">
-        <p class="font-medium"><%= fb.author.email %> — <%= fb.rating %>/5</p>
+        <p class="font-medium">
+          <%= link_to fb.author.profile.display_name, profile_path(fb.author.profile), class: "underline" %> — <%= fb.rating %>/5
+        </p>
         <p class="text-gray-700"><%= fb.comment %></p>
       </li>
     <% end %>

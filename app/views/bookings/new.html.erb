@@ -13,7 +13,7 @@
 
   <div class="mb-4">
     <%= f.label :photographer_id, "Photographer", class: "block font-medium mb-1" %>
-    <%= f.collection_select :photographer_id, User.photographer_role, :id, :email,
+    <%= f.collection_select :photographer_id, User.photographer_role.includes(:profile), :id, :display_name,
           { prompt: "Choose a photographer" }, { class: "border rounded px-3 py-2 w-full" } %>
   </div>
 
