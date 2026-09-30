@@ -8,7 +8,7 @@ class SendFeedbackRemindersJob < ApplicationJob
 
     Booking.feedback_pending.where("completed_at::date IN (?)", dates).find_each do |booking|
       [booking.model, booking.photographer].each do |user|
-        next if booking.feedbacks.exists?(author_id: user.id)
+        next unless booking.awaiting_feedback_from?(user)
 
         FeedbackReminderMailer.with(booking: booking, user: user).reminder.deliver_now
       end

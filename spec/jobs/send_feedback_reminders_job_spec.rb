@@ -28,4 +28,14 @@ RSpec.describe SendFeedbackRemindersJob, type: :job do
 
     expect(ActionMailer::Base.deliveries).to be_empty
   end
+
+  it "doesn't remind someone who filed a safety report" do
+    booking.update!(completed_at: 3.days.ago)
+    SafetyReport.create!(booking: booking, reporter: model, body: "Something happened I need to report.")
+    Feedback.create!(booking: booking, author: photographer, rating: 5, comment: "Great session, thank you.")
+
+    described_class.perform_now
+
+    expect(ActionMailer::Base.deliveries).to be_empty
+  end
 end

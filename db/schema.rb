@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_29_033113) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_30_032225) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -81,6 +81,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_033113) do
     t.index ["user_id"], name: "index_profiles_on_user_id", unique: true
   end
 
+  create_table "safety_reports", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.bigint "reporter_id", null: false
+    t.text "body", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id", "reporter_id"], name: "index_safety_reports_on_booking_id_and_reporter_id", unique: true
+    t.index ["booking_id"], name: "index_safety_reports_on_booking_id"
+    t.index ["reporter_id"], name: "index_safety_reports_on_reporter_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.integer "role", default: 0, null: false
     t.string "city"
@@ -103,4 +115,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_033113) do
   add_foreign_key "feedbacks", "bookings"
   add_foreign_key "feedbacks", "users", column: "author_id"
   add_foreign_key "profiles", "users"
+  add_foreign_key "safety_reports", "bookings"
+  add_foreign_key "safety_reports", "users", column: "reporter_id"
 end

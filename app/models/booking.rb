@@ -7,6 +7,7 @@ class Booking < ApplicationRecord
   validates :requester, presence: true, on: :create
   validate :parties_have_correct_roles
   has_many :feedbacks, dependent: :destroy
+  has_many :safety_reports, dependent: :destroy
 
   enum :status, {
     requested: 0,
@@ -53,6 +54,11 @@ class Booking < ApplicationRecord
   def both_sides_gave_feedback?
     feedbacks.where(author_id: model_id).exists? &&
       feedbacks.where(author_id: photographer_id).exists?
+  end
+
+  def awaiting_feedback_from?(user)
+    !feedbacks.exists?(author_id: user.id) &&
+      !safety_reports.exists?(reporter_id: user.id)
   end
 
   private

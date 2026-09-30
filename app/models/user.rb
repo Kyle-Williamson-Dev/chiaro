@@ -15,6 +15,7 @@ class User < ApplicationRecord
     Booking.feedback_pending
            .where("model_id = :id OR photographer_id = :id", id: id)
            .where.not(id: Feedback.where(author_id: id).select(:booking_id))
+           .where.not(id: SafetyReport.where(reporter_id: id).select(:booking_id))
   end
 
   def has_pending_feedback?
