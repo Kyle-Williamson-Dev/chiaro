@@ -61,6 +61,15 @@ class Booking < ApplicationRecord
       !safety_reports.exists?(reporter_id: user.id)
   end
 
+  def feedback_revealed?
+    feedbacks.distinct.count(:author_id) >= 2
+  end
+
+  def visible_feedbacks_for(user)
+    return feedbacks if feedback_revealed? || user.admin_role?
+    feedbacks.where(author: user)
+  end
+
   private
 
   def parties_have_correct_roles
