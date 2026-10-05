@@ -53,6 +53,14 @@ class BookingsController < ApplicationController
     redirect_to @booking, notice: "Booking marked complete. Feedback is now required from both sides."
   end
 
+  def cancel
+    @booking = Booking.find(params[:id])
+    authorize @booking
+    reason = Booking.cancel_reasons.key?(params[:cancel_reason]) ? params[:cancel_reason] : "other"
+    @booking.cancel_by!(current_user, reason: reason)
+    redirect_to @booking, notice: "Booking cancelled."
+  end
+
   private
 
   def require_feedback_first

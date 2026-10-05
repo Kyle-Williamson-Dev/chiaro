@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_30_032225) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_05_035024) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -50,6 +50,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_032225) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "requester_id"
+    t.bigint "cancelled_by_id"
+    t.integer "cancel_reason"
+    t.datetime "cancelled_at"
+    t.index ["cancelled_by_id"], name: "index_bookings_on_cancelled_by_id"
     t.index ["model_id"], name: "index_bookings_on_model_id"
     t.index ["photographer_id"], name: "index_bookings_on_photographer_id"
     t.index ["requester_id"], name: "index_bookings_on_requester_id"
@@ -109,6 +113,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_032225) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bookings", "users", column: "cancelled_by_id"
   add_foreign_key "bookings", "users", column: "model_id"
   add_foreign_key "bookings", "users", column: "photographer_id"
   add_foreign_key "bookings", "users", column: "requester_id"

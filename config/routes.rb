@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     member do
       post :confirm
       post :complete
+      post :cancel
     end
   end
 

@@ -4,6 +4,7 @@ class Booking < ApplicationRecord
   belongs_to :model, class_name: "User"
   belongs_to :photographer, class_name: "User"
   belongs_to :requester, class_name: "User", optional: true
+  belongs_to :cancelled_by, class_name: "User", optional: true
   validates :requester, presence: true, on: :create
   validate :parties_have_correct_roles
   has_many :feedbacks, dependent: :destroy
@@ -15,8 +16,11 @@ class Booking < ApplicationRecord
     completed: 2,
     feedback_pending: 3,
     credited: 4,
-    disputed: 5
+    disputed: 5,
+    cancelled: 6
   }
+
+  enum :cancel_reason, { changed_plans: 0, no_response: 1, no_show: 2, other: 3 }, prefix: :cancelled_for
 
   aasm column: :status, enum: true do
     state :requested, initial: true
@@ -25,6 +29,7 @@ class Booking < ApplicationRecord
     state :feedback_pending
     state :credited
     state :disputed
+    state :cancelled
 
     event :confirm do
       transitions from: :requested, to: :confirmed
@@ -49,6 +54,10 @@ class Booking < ApplicationRecord
     event :resolve_dispute do
       transitions from: :disputed, to: :feedback_pending
     end
+
+    event :cancel do
+      transitions from: [:requested, :confirmed], to: :cancelled
+    end
   end
 
   def both_sides_gave_feedback?
@@ -68,6 +77,11 @@ class Booking < ApplicationRecord
   def visible_feedbacks_for(user)
     return feedbacks if feedback_revealed? || user.admin_role?
     feedbacks.where(author: user)
+  end
+
+  def cancel_by!(user, reason:)
+    assign_attributes(cancelled_by: User, cancel_reason: reason, cancelled_at: Time.current)
+    cancel!
   end
 
   private

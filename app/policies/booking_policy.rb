@@ -26,6 +26,10 @@ class BookingPolicy < ApplicationPolicy
     end
   end
 
+  def cancel?
+    record.model_id == user.id || record.photographer_id == user.id
+  end
+
   private
 
   def party?
