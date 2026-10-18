@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resource  :profile,  only: [:edit, :update], as: :my_profile
+  resources :workshops, only: [:index, :show, :new, :create, :edit, :update] 
+  resources  :profile,  only: [:edit, :update], as: :my_profile
   resources :profiles, only: [:show]           # /profiles/:id, which is anyone's
   resources :bookings, only: [:index, :show, :new, :create] do
     resources :feedbacks, only: [:new, :create]
