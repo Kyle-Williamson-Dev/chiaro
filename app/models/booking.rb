@@ -80,7 +80,7 @@ class Booking < ApplicationRecord
   end
 
   def cancel_by!(user, reason:)
-    assign_attributes(cancelled_by: User, cancel_reason: reason, cancelled_at: Time.current)
+    assign_attributes(cancelled_by: user, cancel_reason: reason, cancelled_at: Time.current)
     cancel!
   end
 

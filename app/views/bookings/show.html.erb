@@ -6,6 +6,11 @@
   <p><span class="font-semibold">Photographer:</span>
     <%= link_to @booking.photographer.profile.display_name, profile_path(@booking.photographer.profile), class: "underline" %></p>
   <p><span class="font-semibold">Status:</span> <%= @booking.status.humanize %></p>
+  <% if @booking.cancelled? %>
+    <p><span class="font-semibold">Cancelled by:</span>
+      <%= @booking.cancelled_by&.display_name %> on <%= @booking.cancelled_at&.to_date&.to_fs(:long) %></p>
+    <p><span class="font-semibold">Reason:</span> <%= @booking.cancel_reason&.humanize %></p>
+  <% end %>
 </div>
 
 <div class="flex gap-3 mb-6">
@@ -19,6 +24,17 @@
     <%= button_to "Mark as Complete", complete_booking_path(@booking), method: :post, class: "px-4 py-2 bg-black text-white rounded" %>
   <% end %>
 </div>
+
+<% if @booking.may_cancel? && policy(@booking).cancel? %>
+  <%= form_with url: cancel_booking_path(@booking), method: :post, class: "flex items-center gap-2 mb-6",
+        data: { turbo_confirm: "Cancel this booking? This can't be undone." } do |f| %>
+    <%= f.select :cancel_reason,
+          [["Plans changed", "changed_plans"], ["No response", "no_response"],
+           ["The other party didn't show", "no_show"], ["Other", "other"]],
+          {}, class: "border rounded px-3 py-2" %>
+    <%= f.submit "Cancel booking", class: "px-4 py-2 border border-red-600 text-red-700 rounded cursor-pointer" %>
+  <% end %>
+<% end %>
 
 <% if @booking.feedback_pending? %>
   <% existing_feedback = @booking.feedbacks.find_by(author: current_user) %>

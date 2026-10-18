@@ -69,7 +69,7 @@ RSpec.describe "Bookings", type: :request do
       get new_booking_path
 
       expect(response).to redirect_to(new_booking_feedback_path(booking))
-      expect(flash[:alert]).to include(photographer.email)
+      expect(flash[:alert]).to include(photographer.display_name)
     end
   end
 end

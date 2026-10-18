@@ -69,7 +69,7 @@ class BookingsController < ApplicationController
 
     other = pending.model == current_user ? pending.photographer : pending.model
     redirect_to new_booking_feedback_path(pending),
-      alert: "Leave feedback for your session with #{other.email} to book again."
+      alert: "Leave feedback for your session with #{other.display_name} to book again."
   end
 
   def booking_params
