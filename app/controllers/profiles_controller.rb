@@ -6,7 +6,7 @@ class ProfilesController < ApplicationController
     @profile = Profile.find(params[:id])
     authorize @profile
     @credits = @profile.user.credited_bookings
-                       .includes(model: :propfile, photographer: :profile)
+                       .includes(model: :profile, photographer: :profile)
   end
 
   def edit; end

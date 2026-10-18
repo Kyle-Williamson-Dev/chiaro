@@ -25,4 +25,18 @@ RSpec.describe "Profiles", type: :request do
     expect(user.profile.reload.display_name).to eq("New Name")
     expect(other.profile.reload.display_name).not_to eq("New Name")
   end
+
+  it "shows credits from credited bookings" do
+    booking = Booking.create!(model: user, photographer: other, requester: user)
+    booking.confirm!
+    booking.complete!
+    Feedback.create!(booking: booking, author: user, rating: 5, comment: "Great shoot, very professional.")
+    Feedback.create!(booking: booking, author: other, rating: 5, comment: "Great to work with, on time.")
+
+    sign_in user
+    get profile_path(user.profile)
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include(other.display_name)
+  end
 end
