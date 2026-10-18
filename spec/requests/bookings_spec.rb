@@ -56,6 +56,18 @@ RSpec.describe "Bookings", type: :request do
       expect(response).to redirect_to(new_booking_feedback_path(old_booking))
       expect(flash[:alert]).to include("Leave feedback")
     end
+
+    it "lets a photographer request a model" do
+      sign_in photographer
+
+      post bookings_path, params: { booking: { model_id: model.id } }
+
+      booking = Booking.last
+      expect(response).to redirect_to(booking)
+      expect(booking.model).to eq(model)
+      expect(booking.photographer).to eq(photographer)
+      expect(booking.requester).to eq(photographer)
+    end
   end
     describe "pending feedback gate" do
     it "sends the user to the feedback form for the booking they owe" do
