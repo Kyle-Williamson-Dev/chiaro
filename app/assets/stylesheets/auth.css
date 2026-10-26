@@ -1,0 +1,400 @@
+/* ─────────────────────────────────────────────────────────────
+   Chiaro — sign-in / sign-up screens
+   Plain CSS, no Tailwind needed. Loaded only by layouts/auth.
+
+   Phones + tablets (under 1024px): photo fills the screen as a
+   darkened background, form floats on top.
+   Desktop (1024px and up): form on the left, photo on the right.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --ink: #0E0C0B;
+  --ink-raised: #12100E;
+  --panel: #161311;
+  --line: #2A2521;
+  --line-strong: #3A332E;
+  --line-muted: #5A5048;
+  --ivory: #EFE7DC;
+  --ivory-dim: #CFC5B8;
+  --stone: #A3978A;
+  --stone-dim: #8C8175;
+  --brass: #B08D57;
+  --brass-hi: #C2A06A;
+  --alert: #D98A7E;
+
+  --display: "Bodoni Moda", Georgia, serif;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--ink); }
+
+body.auth-body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--ivory);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.auth-body a { color: var(--ivory); text-underline-offset: 4px; }
+.auth-body a:hover { color: var(--brass); }
+.auth-body ::selection { background: var(--brass); color: var(--ink); }
+
+/* ── Page frame ─────────────────────────────────────────── */
+
+.auth {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+}
+
+/* ── Photo ──────────────────────────────────────────────── */
+
+/* Phones + tablets: the photo is the whole background. */
+.auth-photo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  margin: 0;
+  overflow: hidden;
+  background: var(--ink-raised);
+}
+
+.auth-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 25%;
+  display: block;
+}
+
+/* The darkening layer, so the form stays readable. */
+.auth-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(14, 12, 11, 0.70) 0%,
+      rgba(14, 12, 11, 0.82) 45%,
+      rgba(14, 12, 11, 0.94) 100%);
+}
+
+/* The quote over the photo only shows on desktop. */
+.auth-photo-caption { display: none; }
+
+/* ── Form column ────────────────────────────────────────── */
+
+.auth-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 28px 20px 32px;
+}
+
+.auth-logo {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+}
+.auth-body a.auth-logo { color: var(--ivory); }
+
+.auth-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 36px;
+}
+
+.auth-header { display: flex; flex-direction: column; gap: 16px; }
+
+.auth-kicker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.auth-kicker::after {
+  content: "";
+  width: 48px;
+  height: 1px;
+  background: var(--brass);
+}
+
+.auth-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(44px, 9vw, 64px);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.auth-title em { font-style: italic; color: var(--brass); }
+
+.auth-lede {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ivory-dim);
+  max-width: 30em;
+}
+
+/* ── Flash messages ─────────────────────────────────────── */
+
+.auth-flash {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  font-size: 15px;
+  line-height: 1.5;
+  background: rgba(18, 16, 14, 0.9);
+  border: 1px solid rgba(176, 141, 87, 0.55);
+}
+.auth-flash::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  background: var(--brass);
+}
+.auth-flash--alert { border-color: rgba(217, 138, 126, 0.55); color: var(--alert); }
+.auth-flash--alert::before { background: var(--alert); }
+
+/* ── Form ───────────────────────────────────────────────── */
+
+.auth-form { display: flex; flex-direction: column; gap: 20px; }
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.auth-field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.auth-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  font: 400 16px var(--sans); /* 16px stops iOS zooming in on focus */
+  color: var(--ivory);
+  background: rgba(22, 19, 17, 0.88);
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.15s;
+}
+.auth-input::placeholder { color: #7D7268; }
+.auth-input:focus {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 1px var(--brass);
+}
+/* Keep Chrome's autofill from painting the field yellow/white. */
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ivory);
+  -webkit-box-shadow: 0 0 0 1000px var(--panel) inset;
+  caret-color: var(--ivory);
+  transition: background-color 9999s;
+}
+
+.auth-small-link { font-size: 13px; font-weight: 400; }
+.auth-body a.auth-small-link { color: var(--stone); }
+.auth-body a.auth-small-link:hover { color: var(--brass); }
+
+.auth-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 15px;
+  color: var(--ivory-dim);
+  cursor: pointer;
+}
+.auth-check input {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brass);
+  cursor: pointer;
+}
+
+.auth-submit {
+  width: 100%;
+  height: 56px;
+  margin-top: 4px;
+  padding: 0 32px;
+  border: 0;
+  border-radius: 0;
+  background: var(--brass);
+  color: var(--ink);
+  font: 600 15px var(--sans);
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: background-color 0.15s;
+}
+.auth-submit:hover { background: var(--brass-hi); }
+.auth-submit:focus-visible { outline: 2px solid var(--ivory); outline-offset: 3px; }
+
+/* ── Sign-up prompt + footer ────────────────────────────── */
+
+.auth-switch {
+  margin: 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  font-size: 15px;
+  color: var(--stone);
+}
+
+.auth-ghost {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--line-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.auth-body a.auth-ghost { color: var(--ivory); }
+.auth-body a.auth-ghost:hover { border-color: var(--brass); color: var(--ivory); }
+
+.auth-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--stone-dim);
+}
+
+/* ── Tablets (600–1023px): same background, roomier card ── */
+
+@media (min-width: 600px) {
+  .auth-panel { padding: 40px 48px 40px; gap: 56px; }
+  .auth-main {
+    flex: 0 0 auto;
+    margin: auto 0;
+    padding: 48px;
+    background: rgba(14, 12, 11, 0.55);
+    border: 1px solid rgba(90, 80, 72, 0.6);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .auth-panel { max-width: 600px; }
+}
+
+/* ── Desktop (1024px+): form left, photo right ──────────── */
+
+@media (min-width: 1024px) {
+  .auth {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  }
+
+  .auth-panel {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 560px;
+    padding: 36px clamp(40px, 5vw, 88px) 36px;
+    gap: 64px;
+  }
+
+  .auth-main {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .auth-photo {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    border-left: 1px solid var(--line);
+  }
+
+  /* Lighter darkening on desktop: just a fade at the bottom for the quote. */
+  .auth-photo::after {
+    background:
+      linear-gradient(180deg,
+        rgba(14, 12, 11, 0) 50%,
+        rgba(14, 12, 11, 0.85) 100%);
+  }
+
+  .auth-photo-caption {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    margin: 0;
+    padding: 48px clamp(40px, 4vw, 64px);
+  }
+  .auth-photo-caption p {
+    margin: 0;
+    max-width: 18em;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(26px, 2.2vw, 34px);
+    line-height: 1.2;
+    color: var(--ivory);
+  }
+  .auth-photo-caption span {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--stone);
+  }
+}
+
+/* Respect reduced-motion settings. */
+@media (prefers-reduced-motion: reduce) {
+  .auth-body * { transition: none !important; }
+}

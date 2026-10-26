@@ -1,1 +1,104 @@
 @import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   Chiaro — chiaroscuro theme
+   Near-black ground, ivory type, one brass accent.
+   Bodoni Moda (display) over Schibsted Grotesk (body).
+   ───────────────────────────────────────────────────────────── */
+
+@theme {
+  /* grounds */
+  --color-ink: #0E0C0B;          /* page */
+  --color-ink-raised: #12100E;   /* bands, strips */
+  --color-panel: #161311;        /* inputs, cards */
+  --color-panel-hi: #1C1814;     /* selected chips */
+
+  /* rules */
+  --color-line: #2A2521;
+  --color-line-strong: #3A332E;
+  --color-line-muted: #5A5048;
+
+  /* type */
+  --color-ivory: #EFE7DC;
+  --color-ivory-dim: #CFC5B8;
+  --color-ivory-soft: #DCD2C5;
+  --color-stone: #A3978A;
+  --color-stone-dim: #8C8175;
+
+  /* accent */
+  --color-brass: #B08D57;
+  --color-brass-hi: #C2A06A;
+  --color-brass-deep: #7A5C30;   /* brass on ivory */
+
+  /* ivory "paper" sections */
+  --color-paper-line: #C9BEB0;
+  --color-paper-text: #3A322C;
+
+  /* alerts (readable on ink) */
+  --color-alert: #D98A7E;
+
+  --font-display: "Bodoni Moda", Georgia, serif;
+  --font-sans: "Schibsted Grotesk", system-ui, sans-serif;
+}
+
+@layer base {
+  html { background-color: var(--color-ink); }
+  body {
+    @apply bg-ink text-ivory font-sans antialiased;
+  }
+  a:hover { color: var(--color-brass); }
+  ::selection { background: var(--color-brass); color: var(--color-ink); }
+  input::placeholder, textarea::placeholder { color: #7D7268; }
+}
+
+@layer components {
+  /* layout */
+  .wrap { @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-14; }
+
+  /* type */
+  .kicker { @apply text-xs font-semibold tracking-[0.2em] uppercase text-brass; }
+  .folio  { @apply font-display italic text-lg text-brass; }
+  .display-xl { @apply font-display font-normal text-[clamp(44px,6vw,88px)] leading-[0.98] tracking-[-1.5px]; }
+  .display-lg { @apply font-display font-normal text-[clamp(38px,4.6vw,66px)] leading-none tracking-[-1px]; }
+  .display-md { @apply font-display font-normal text-[clamp(30px,3.4vw,44px)] leading-tight tracking-[-0.5px]; }
+  .eyebrow-rule { @apply inline-block h-px w-12 bg-brass; }
+
+  /* buttons — add .btn plus one variant */
+  .btn {
+    @apply inline-flex h-13 cursor-pointer items-center justify-center gap-2 px-7
+           text-[15px] font-semibold tracking-[0.2px] no-underline transition-colors;
+  }
+  .btn-brass { @apply bg-brass text-ink hover:bg-brass-hi hover:text-ink; }
+  .btn-ghost { @apply border border-line-muted bg-transparent text-ivory hover:border-brass hover:text-ivory; }
+  .btn-quiet { @apply h-11 px-0 text-stone underline decoration-line-muted underline-offset-[6px] hover:text-brass; }
+  .btn-sm    { @apply h-11 px-5 text-sm; }
+
+  /* forms */
+  .field-label { @apply flex flex-col gap-2 text-sm font-medium text-ivory; }
+  .field {
+    @apply h-[50px] w-full border border-line-strong bg-panel px-4 text-[15px] text-ivory
+           focus:border-brass focus:outline-none;
+  }
+  textarea.field { @apply h-auto py-3.5 leading-relaxed; }
+  select.field { @apply px-3.5; }
+  .field-hint { @apply text-[13px] font-normal text-stone-dim; }
+
+  /* chips — tag style used for shoot types */
+  .chip { @apply inline-flex items-center border border-line-muted px-4 py-2 text-sm text-ivory; }
+  .chip-toggle {
+    @apply flex h-11 cursor-pointer items-center gap-2.5 border border-line-strong px-[18px] text-sm
+           has-[:checked]:border-brass has-[:checked]:bg-panel-hi;
+  }
+
+  /* lists ruled like the landing page */
+  .ruled > * { @apply border-t border-line; }
+  .ruled > *:last-child { @apply border-b; }
+
+  /* landing hero */
+  .hero-scrim {
+    background: linear-gradient(90deg, rgba(14,12,11,0) 38%, rgba(14,12,11,.92) 70%);
+  }
+  .side-scrim {
+    background: linear-gradient(180deg, rgba(14,12,11,0) 0%, rgba(14,12,11,.88) 55%);
+  }
+}

@@ -1,7 +1,7 @@
 class CreateWorkshops < ActiveRecord::Migration[8.1]
   def change
     create_table :workshops do |t|
-      t.references :host, null: false, foreign_key: true
+      t.references :host, null: false, foreign_key: { to_table: :users }
       t.string :title
       t.text :description, null: false
       t.string :shoot_type, null: false

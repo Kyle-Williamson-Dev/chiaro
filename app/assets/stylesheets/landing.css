@@ -1,0 +1,537 @@
+/* ─────────────────────────────────────────────────────────────
+   Chiaro — public landing page
+   Plain CSS, no Tailwind needed. Loaded only by layouts/landing.
+   Same palette and type as auth.css (sign-in / sign-up).
+
+   Breakpoints
+   - under 600px   phones
+   - 600–1023px    tablets
+   - 1024px+       desktop (side-by-side sections, full nav)
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --ink: #0E0C0B;
+  --ink-raised: #12100E;
+  --panel: #161311;
+  --line: #2A2521;
+  --line-strong: #3A332E;
+  --line-muted: #5A5048;
+  --ivory: #EFE7DC;
+  --ivory-dim: #CFC5B8;
+  --stone: #A3978A;
+  --stone-dim: #8C8175;
+  --brass: #B08D57;
+  --brass-hi: #C2A06A;
+  --brass-deep: #7A5C30;     /* brass on ivory */
+  --paper-line: #C9BEB0;
+  --paper-text: #3A322C;
+
+  --display: "Bodoni Moda", Georgia, serif;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+
+  --gutter: 20px;
+  --max: 1320px;
+}
+
+@media (min-width: 600px)  { :root { --gutter: 40px; } }
+@media (min-width: 1024px) { :root { --gutter: 56px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--ink); scroll-behavior: smooth; }
+
+body.lp-body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--ivory);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* :where() keeps this default low-priority so specific image rules win. */
+:where(.lp-body) img { max-width: 100%; display: block; }
+.lp-body a { color: var(--ivory); text-underline-offset: 5px; }
+.lp-body a:hover { color: var(--brass); }
+.lp-body ::selection { background: var(--brass); color: var(--ink); }
+
+/* Section anchors clear the sticky nav. */
+.lp-body [id] { scroll-margin-top: 84px; }
+
+/* ── Shared pieces ──────────────────────────────────────── */
+
+.lp-wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.lp-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.lp-kicker-rule { flex-shrink: 0; width: 48px; height: 1px; background: currentColor; }
+
+/* Parts of a label that drop off on small phones. */
+@media (max-width: 479px) { .lp-hide-sm { display: none; } }
+
+.lp-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+.lp-heading h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(34px, 3.6vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+}
+.lp-folio {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--brass);
+}
+
+.lp-body em { font-style: italic; color: var(--brass); }
+
+/* Buttons */
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 28px;
+  font: 600 15px var(--sans);
+  letter-spacing: 0.2px;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+.lp-body a.lp-btn--brass { background: var(--brass); color: var(--ink); }
+.lp-body a.lp-btn--brass:hover { background: var(--brass-hi); color: var(--ink); }
+.lp-body a.lp-btn--ghost { border-color: var(--line-muted); color: var(--ivory); }
+.lp-body a.lp-btn--ghost:hover { border-color: var(--brass); color: var(--ivory); }
+.lp-body a.lp-btn--ink { border-color: var(--ink); color: var(--ink); }
+.lp-body a.lp-btn--ink:hover { background: var(--ink); color: var(--ivory); }
+.lp-btn--lg { height: 56px; padding: 0 34px; }
+.lp-btn--sm { height: 44px; padding: 0 20px; font-size: 14px; }
+
+.lp-body a:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+
+/* ── Nav ────────────────────────────────────────────────── */
+
+.lp-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(14, 12, 11, 0.92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.lp-nav-inner {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.lp-logo {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 30px;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+}
+.lp-body a.lp-logo { color: var(--ivory); }
+
+.lp-nav-links { display: none; }
+.lp-nav-actions { display: flex; align-items: center; gap: 18px; }
+.lp-body a.lp-nav-signin { font-size: 14px; color: var(--ivory-dim); text-decoration: none; }
+.lp-body a.lp-nav-signin:hover { color: var(--brass); }
+
+/* Short button label on small phones */
+.lp-long  { display: none; }
+@media (min-width: 480px) { .lp-long { display: inline; } .lp-short { display: none; } }
+
+.lp-nav-actions a { white-space: nowrap; }
+
+@media (min-width: 1024px) {
+  .lp-nav-inner { height: 84px; }
+  .lp-logo { font-size: 34px; }
+  .lp-nav-actions { gap: 28px; }
+}
+
+/* Section links only once there's room for them on one line. */
+@media (min-width: 1180px) {
+  .lp-nav-links a { white-space: nowrap; }
+  .lp-nav-links {
+    display: flex;
+    gap: 34px;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+  }
+  .lp-body .lp-nav-links a { color: var(--stone); text-decoration: none; }
+  .lp-body .lp-nav-links a:hover { color: var(--ivory); }
+}
+
+/* ── Hero ───────────────────────────────────────────────── */
+/* Phones + tablets: photo fills the screen, darkened, copy on top.
+   Desktop: photo across the whole hero, fading to black on the right
+   where the copy sits.                                              */
+
+.lp-hero {
+  position: relative;
+  min-height: calc(100svh - 72px);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: var(--ink-raised);
+}
+.lp-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% 0%;
+}
+
+/* Phones + tablets (portrait photo): the photo is made taller than the
+   hero and pinned to the bottom, so its top quarter (forehead and eyes)
+   sits above the frame. The top of the screen starts at her lips/chin.
+   Raise --hero-crop to start lower on her body, lower it to show more face. */
+@media (max-width: 1023px) {
+  .lp-hero { --hero-crop: 133%; }
+  .lp-hero-img {
+    top: auto;
+    bottom: 0;
+    height: var(--hero-crop);
+  }
+}
+
+/* Phones: the hero is tall and narrow, so filling its height zooms in too
+   far. Size the photo to the screen width instead (130%), keep the same
+   lips-and-chin starting point, and fade its bottom edge into the black
+   behind the copy.
+   - zoom: change both 130vw values together (e.g. 115vw = further out)
+   - start point: top = -(zoom × 0.405), e.g. 130 → -52.6vw, 115 → -46.6vw
+   - left/right: left = 50 − (zoom × 0.55), e.g. 130 → -21.5vw          */
+@media (max-width: 599px) {
+  .lp-hero-img {
+    top: -52.6vw;
+    bottom: auto;
+    left: -21.5vw;
+    width: 130vw;
+    max-width: none;
+    height: auto;
+    -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+  }
+}
+/* Light at the top so her face reads, dark at the bottom behind the copy. */
+.lp-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(14, 12, 11, 0.10) 0%,
+    rgba(14, 12, 11, 0.25) 30%,
+    rgba(14, 12, 11, 0.80) 58%,
+    rgba(14, 12, 11, 0.96) 100%);
+}
+.lp-hero-copy {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  /* Leave room at the top for the photo; the hero grows taller to fit. */
+  padding: clamp(240px, 40svh, 400px) var(--gutter) 56px;
+}
+.lp-hero h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(44px, 11vw, 88px);
+  line-height: 0.98;
+  letter-spacing: -1.5px;
+  text-wrap: balance;
+}
+.lp-hero-lede {
+  margin: 0;
+  max-width: 32em;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ivory-dim);
+}
+.lp-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  padding-top: 8px;
+}
+.lp-body a.lp-text-link {
+  font-size: 15px;
+  color: var(--ivory);
+  text-decoration: underline;
+  text-decoration-color: var(--line-muted);
+}
+.lp-hero-signin {
+  margin: 0;
+  font-size: 14px;
+  color: var(--stone);
+}
+
+@media (min-width: 600px) {
+  .lp-hero-copy { padding-bottom: 80px; max-width: 680px; }
+  .lp-hero-lede { font-size: 18px; }
+}
+
+@media (min-width: 1024px) {
+  /* Hero fills the screen below the nav (within sensible limits). */
+  .lp-hero {
+    min-height: 0;
+    height: clamp(640px, calc(100svh - 84px), 1080px);
+    align-items: center;
+  }
+
+  /* Whole photo, never cropped: it's sized to the hero's height and
+     pinned left. Its right edge fades into the black background, so on
+     very wide screens there's no seam where the photo ends.         */
+  .lp-hero-img {
+    inset: 0 auto 0 0;
+    width: auto;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;   /* only trims a sliver at narrow desktop widths */
+    object-position: 18% 50%;
+    -webkit-mask-image: linear-gradient(90deg, #000 72%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 72%, transparent 100%);
+  }
+  .lp-hero::after {
+    background: linear-gradient(90deg,
+      rgba(14, 12, 11, 0) 38%,
+      rgba(14, 12, 11, 0.92) 68%);
+  }
+  .lp-hero-copy {
+    margin-left: auto;
+    width: min(620px, 50%);
+    max-width: none;
+    padding: 96px var(--gutter) 96px 0;
+    gap: 28px;
+  }
+}
+
+/* ── Rules strip ────────────────────────────────────────── */
+
+.lp-rules {
+  background: var(--ink-raised);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.lp-rules ul {
+  margin: 0 auto;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 28px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--stone);
+}
+.lp-rules li { display: flex; align-items: center; gap: 12px; }
+.lp-rules li::before { content: "—"; color: var(--brass); }
+
+/* Phones: a stacked list. Tablets and up: one line, dot separators. */
+.lp-rules ul { flex-direction: column; gap: 10px; }
+@media (min-width: 600px) {
+  .lp-rules ul { flex-direction: row; gap: 12px 28px; }
+  .lp-rules li { gap: 28px; }
+  .lp-rules li::before { content: none; }
+  .lp-rules li + li::before { content: "·"; }
+}
+
+/* ── Manifesto ──────────────────────────────────────────── */
+
+.lp-manifesto { padding: clamp(80px, 10vw, 160px) 0; }
+.lp-manifesto .lp-wrap { max-width: 1100px; display: flex; flex-direction: column; gap: 32px; }
+.lp-manifesto p {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(28px, 3.8vw, 54px);
+  line-height: 1.18;
+  letter-spacing: -0.5px;
+  text-wrap: pretty;
+}
+.lp-manifesto .lp-kicker { color: var(--stone-dim); letter-spacing: 0.18em; font-weight: 500; }
+
+/* ── i. Standards ───────────────────────────────────────── */
+
+.lp-standards { padding-bottom: clamp(96px, 10vw, 150px); }
+.lp-standards .lp-heading { padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.lp-standards-grid {
+  margin-top: 48px;
+  display: grid;
+  gap: 44px;
+}
+@media (min-width: 900px) { .lp-standards-grid { grid-template-columns: repeat(3, 1fr); gap: 48px; } }
+
+.lp-standard { display: flex; flex-direction: column; gap: 14px; }
+.lp-standard-num { font-size: 12px; font-weight: 600; letter-spacing: 0.2em; color: var(--brass); }
+.lp-standard h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.15;
+}
+.lp-standard p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--stone); }
+
+/* ── ii / iii. Photo + text split sections ──────────────── */
+
+.lp-split { display: grid; }
+.lp-split--raised {
+  background: var(--ink-raised);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.lp-split-img {
+  width: 100%;
+  height: 100%;
+  min-height: 460px;
+  max-height: 80vh;
+  object-fit: cover;
+}
+.lp-split-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+  padding: clamp(56px, 7vw, 112px) var(--gutter);
+}
+@media (min-width: 1024px) {
+  .lp-split { grid-template-columns: 1fr 1fr; }
+  .lp-split-img { min-height: 720px; max-height: none; }
+  .lp-split-body { padding-left: clamp(48px, 6vw, 96px); padding-right: clamp(48px, 6vw, 96px); }
+  .lp-split--flip .lp-split-img { order: 2; }
+}
+
+.lp-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lp-steps li {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 12px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+}
+.lp-steps li:last-child { border-bottom: 1px solid var(--line); }
+.lp-step-num { font-family: var(--display); font-size: 22px; color: var(--brass); }
+.lp-steps strong { display: block; margin-bottom: 6px; font-size: 17px; font-weight: 600; }
+.lp-steps span { font-size: 15px; line-height: 1.6; color: var(--stone); }
+
+.lp-split-lede { margin: 0; max-width: 32em; font-size: 17px; line-height: 1.7; color: var(--ivory-dim); }
+
+.lp-checklist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  column-gap: 40px;
+  font-size: 15px;
+  color: var(--stone);
+}
+@media (min-width: 600px) { .lp-checklist { grid-template-columns: 1fr 1fr; } }
+.lp-checklist li { padding: 14px 0; border-top: 1px solid var(--line); }
+.lp-note { margin: 0; font-size: 14px; line-height: 1.6; color: var(--stone-dim); }
+
+/* ── iv. For photographers (ivory "paper" section) ──────── */
+
+.lp-paper {
+  background: var(--ivory);
+  color: var(--ink);
+  padding: clamp(80px, 9vw, 136px) 0;
+}
+.lp-paper .lp-folio { color: var(--brass-deep); }
+.lp-paper-grid { display: grid; gap: 52px; align-items: start; }
+@media (min-width: 1024px) { .lp-paper-grid { grid-template-columns: 1fr 1fr; gap: 56px; } }
+.lp-paper-intro { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
+.lp-paper-intro p { margin: 0; max-width: 30em; font-size: 17px; line-height: 1.7; color: var(--paper-text); }
+
+.lp-terms { margin: 0; font-size: 16px; line-height: 1.55; }
+.lp-terms div {
+  display: grid;
+  gap: 6px;
+  padding: 18px 0;
+  border-top: 1px solid var(--paper-line);
+}
+.lp-terms div:first-child { border-top-color: var(--ink); }
+.lp-terms div:last-child { border-bottom: 1px solid var(--paper-line); }
+@media (min-width: 600px) { .lp-terms div { grid-template-columns: 180px 1fr; gap: 16px; } }
+.lp-terms dt { font-weight: 600; }
+.lp-terms dd { margin: 0; color: var(--paper-text); }
+
+/* ── Closing call to action ─────────────────────────────── */
+
+.lp-closing { padding: clamp(96px, 11vw, 170px) 0; text-align: center; }
+.lp-closing .lp-wrap {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.lp-closing h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -1px;
+}
+.lp-closing p { margin: 0; max-width: 34em; font-size: 17px; line-height: 1.7; color: var(--stone); }
+.lp-closing-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+
+/* ── Footer ─────────────────────────────────────────────── */
+
+.lp-footer { border-top: 1px solid var(--line); }
+.lp-footer .lp-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px 28px;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  font-size: 13px;
+  color: var(--stone-dim);
+}
+.lp-footer .lp-logo { font-size: 24px; }
+.lp-footer-links { display: flex; flex-wrap: wrap; gap: 24px; }
+.lp-body .lp-footer-links a { color: var(--stone); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .lp-body * { transition: none !important; }
+}

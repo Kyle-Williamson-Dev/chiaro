@@ -1,0 +1,175 @@
+<%
+  # ── Photos ─────────────────────────────────────────────
+  # Swap these for any images in app/assets/images/.
+  hero_image     = "Chelsea.jpg"      # desktop: wide, subject on the left
+  hero_mobile    = "Chelsea4.jpg"  # phones + tablets: portrait
+  booking_image  = "Meli-1.jpg"       # same photo as the sign-in page
+  workshop_image = "Isa.jpg"
+
+  apply_model_path        = new_user_registration_path(role: "model")
+  apply_photographer_path = new_user_registration_path(role: "photographer")
+%>
+<% content_for :title, "Boudoir & fine art nude, on your terms" %>
+
+<%# ── Nav ─────────────────────────────────────────────── %>
+<nav class="lp-nav" aria-label="Main">
+  <div class="lp-wrap lp-nav-inner">
+    <a href="#top" class="lp-logo">Chiaro</a>
+
+    <div class="lp-nav-links">
+      <a href="#standards">Standards</a>
+      <a href="#how">How it works</a>
+      <a href="#workshops">Workshops</a>
+      <a href="#photographers">Photographers</a>
+    </div>
+
+    <div class="lp-nav-actions">
+      <%= link_to "Sign in", new_user_session_path, class: "lp-nav-signin" %>
+      <%= link_to apply_model_path, class: "lp-btn lp-btn--brass lp-btn--sm" do %>
+        <span class="lp-long">Apply as a model</span><span class="lp-short">Apply</span>
+      <% end %>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <%# ── Hero ──────────────────────────────────────────── %>
+  <header class="lp-hero" id="top">
+    <%# Phones and tablets get the portrait photo; desktop gets the wide one. %>
+    <picture>
+      <source media="(max-width: 1023px)" srcset="<%= image_path(hero_mobile) %>">
+      <%= image_tag hero_image, class: "lp-hero-img", fetchpriority: "high",
+            alt: "Black and white fine art portrait of a model against a dark background, lit from one side" %>
+    </picture>
+
+    <div class="lp-hero-copy">
+      <span class="lp-kicker">Founding cohort <span class="lp-kicker-rule"></span> <span class="lp-hide-sm">Invitation only</span></span>
+      <h1>The craft lives in the shadows. <em>The terms don’t.</em></h1>
+      <p class="lp-hero-lede">
+        Chiaro is a private network for boudoir and fine art nude work. Photographers are vetted before you ever see them,
+        every shoot is paid or clearly defined, and boundaries are agreed in writing before anyone books.
+      </p>
+      <div class="lp-hero-actions">
+        <%= link_to "Apply as a model", apply_model_path, class: "lp-btn lp-btn--brass lp-btn--lg" %>
+        <a href="#photographers" class="lp-text-link">I’m a photographer</a>
+      </div>
+      <p class="lp-hero-signin">Already a member? <%= link_to "Sign in", new_user_session_path %></p>
+    </div>
+  </header>
+
+  <%# ── Rules strip ───────────────────────────────────── %>
+  <section class="lp-rules" aria-label="Platform rules">
+    <ul class="lp-wrap">
+      <li>VETTED ON BOTH SIDES</li>
+      <li>PAID OR CLEARLY DEFINED</li>
+      <li>BOUNDARIES IN WRITING</li>
+      <li>CREDITS AFTER EVERY SHOOT</li>
+      <li>NO ADS, EVER</li>
+    </ul>
+  </section>
+
+  <%# ── Manifesto ─────────────────────────────────────── %>
+  <section class="lp-manifesto">
+    <div class="lp-wrap">
+      <p>Most platforms are directories. Chiaro is a set of agreements — <em>made before the shoot, kept during it, and credited after.</em></p>
+      <span class="lp-kicker"><span class="lp-kicker-rule"></span> From chiaroscuro — the play of light and shadow</span>
+    </div>
+  </section>
+
+  <%# ── i. Standards ──────────────────────────────────── %>
+  <section class="lp-standards" id="standards">
+    <div class="lp-wrap">
+      <div class="lp-heading"><span class="lp-folio">i.</span><h2>The standards</h2></div>
+      <div class="lp-standards-grid">
+        <article class="lp-standard">
+          <span class="lp-standard-num">01</span>
+          <h3>Vetted in both directions</h3>
+          <p>Photographers are reviewed on their portfolio, references and conduct before a model ever sees them. Models confirm their identity through a third-party verification service, so Chiaro never holds copies of anyone’s ID.</p>
+        </article>
+        <article class="lp-standard">
+          <span class="lp-standard-num">02</span>
+          <h3>Boundaries before bookings</h3>
+          <p>Every booking carries a written boundaries agreement, a contract and a model release, all signed inside the booking thread. Nothing gets settled in a DM after the fact.</p>
+        </article>
+        <article class="lp-standard">
+          <span class="lp-standard-num">03</span>
+          <h3>Credits aren’t optional</h3>
+          <p>After each session, both sides leave feedback and credit each other. Until you do, you can’t book again. Reputation on Chiaro is built into how it works, not left to chance.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <%# ── ii. How a booking works ───────────────────────── %>
+  <section class="lp-split lp-split--raised" id="how">
+    <%= image_tag booking_image, class: "lp-split-img", loading: "lazy",
+          alt: "Black and white window-light portrait of a model, hands in her hair" %>
+    <div class="lp-split-body">
+      <div class="lp-heading"><span class="lp-folio">ii.</span><h2>How a booking works</h2></div>
+      <ol class="lp-steps">
+        <li><span class="lp-step-num">01</span><div><strong>Request</strong><span>A vetted photographer sends a request with the shoot type, date and concept.</span></div></li>
+        <li><span class="lp-step-num">02</span><div><strong>Agree</strong><span>Boundaries, contract and model release are signed in the booking thread before the date is confirmed.</span></div></li>
+        <li><span class="lp-step-num">03</span><div><strong>Shoot</strong><span>Every message, file and signature stays with the booking, in one place.</span></div></li>
+        <li><span class="lp-step-num">04</span><div><strong>Credit</strong><span>You both leave feedback, and the session is credited to both profiles.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <%# ── iii. Workshops ────────────────────────────────── %>
+  <section class="lp-split lp-split--flip" id="workshops">
+    <%= image_tag workshop_image, class: "lp-split-img", loading: "lazy",
+          alt: "Black and white fine art nude of a model seated on a wooden stool in a sunlit room" %>
+    <div class="lp-split-body">
+      <div class="lp-heading"><span class="lp-folio">iii.</span><h2>Workshops, hosted by models</h2></div>
+      <p class="lp-split-lede">Only models can host. You plan the session, cap the spots and attach your boundaries. Vetted photographers book a place, and the studio address is shared only after they’ve booked.</p>
+      <ul class="lp-checklist">
+        <li>Vetted photographers only</li>
+        <li>Capped spots</li>
+        <li>Location revealed after booking</li>
+        <li>Every attendee credits you</li>
+      </ul>
+      <p class="lp-note">Hosting opens once you have a track record of credited bookings.</p>
+    </div>
+  </section>
+
+  <%# ── iv. For photographers ─────────────────────────── %>
+  <section class="lp-paper" id="photographers">
+    <div class="lp-wrap lp-paper-grid">
+      <div class="lp-paper-intro">
+        <div class="lp-heading"><span class="lp-folio">iv.</span><h2>For photographers</h2></div>
+        <p>Work with models whose identity is verified and whose credits are real. Contracts, releases and message history stay with each booking, so there’s nothing to chase afterward.</p>
+        <%= link_to "Request a photographer invite", apply_photographer_path, class: "lp-btn lp-btn--ink" %>
+      </div>
+      <dl class="lp-terms">
+        <div><dt>Membership</dt><dd>By review. Portfolio, references and conduct are checked before you can book.</dd></div>
+        <div><dt>Workshops</dt><dd>Book a place at a workshop hosted by a model you’d like to work with.</dd></div>
+        <div><dt>What you won’t find</dt><dd>Ads, paid placement, or pay-to-be-seen tiers.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <%# ── Closing ───────────────────────────────────────── %>
+  <section class="lp-closing">
+    <div class="lp-wrap">
+      <span class="lp-kicker">Founding cohort</span>
+      <h2>Step into the light <em>on your terms.</em></h2>
+      <p>Applications are read by a person. Models who travel to shoot are welcome from anywhere.</p>
+      <div class="lp-closing-actions">
+        <%= link_to "Apply as a model", apply_model_path, class: "lp-btn lp-btn--brass lp-btn--lg" %>
+        <%= link_to "Member sign in", new_user_session_path, class: "lp-btn lp-btn--ghost lp-btn--lg" %>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <span class="lp-logo">Chiaro</span>
+    <div class="lp-footer-links">
+      <%= link_to "Sign in", new_user_session_path %>
+      <%= link_to "Apply as a model", apply_model_path %>
+      <%= link_to "Photographer invite", apply_photographer_path %>
+    </div>
+    <span>Members only · 18+</span>
+  </div>
+</footer>

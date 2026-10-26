@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_05_035024) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_204441) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -111,6 +111,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_035024) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "workshops", force: :cascade do |t|
+    t.bigint "host_id", null: false
+    t.string "title"
+    t.text "description", null: false
+    t.string "shoot_type", null: false
+    t.datetime "starts_at", null: false
+    t.integer "capacity", null: false
+    t.decimal "price", precision: 8, scale: 2, default: "0.0", null: false
+    t.string "location_area", null: false
+    t.string "address", null: false
+    t.text "boundaries"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["host_id"], name: "index_workshops_on_host_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookings", "users", column: "cancelled_by_id"
@@ -122,4 +138,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_035024) do
   add_foreign_key "profiles", "users"
   add_foreign_key "safety_reports", "bookings"
   add_foreign_key "safety_reports", "users", column: "reporter_id"
+  add_foreign_key "workshops", "users", column: "host_id"
 end
