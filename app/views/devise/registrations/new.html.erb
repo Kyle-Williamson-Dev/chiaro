@@ -1,34 +1,122 @@
-<h2>Sign up</h2>
+<%
+  # Right-hand photo on desktop, darkened background on phones and tablets.
+  # Any image in app/assets/images/ works.
+  signup_image = "briannasignup3.jpg"
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  
-  <div class="field">
-    <%= f.label :role %>
-    <%= f.select :role, User.roles.keys.excluding("admin").map { |r| [r.humanize, r] } %>
+  # Landing page buttons link here with ?role=model or ?role=photographer.
+  chosen_role = params[:role].presence_in(%w[model photographer]) || resource.role.to_s
+%>
+<% content_for :title, "Apply" %>
+
+<div class="auth">
+
+  <div class="auth-panel">
+    <%= link_to "Chiaro", root_path, class: "auth-logo" %>
+
+    <main class="auth-main">
+      <header class="auth-header">
+        <span class="auth-kicker">Founding cohort</span>
+        <h1 class="auth-title">Step into <em>the light.</em></h1>
+        <p class="auth-lede">
+          Start with your account. Your profile, portfolio and boundaries come next,
+          and profiles are only ever visible to signed-in members.
+        </p>
+      </header>
+
+      <% if resource.errors.any? %>
+        <div class="auth-errors" role="alert">
+          <strong><%= pluralize(resource.errors.count, "thing") %> to fix</strong>
+          <ul>
+            <% resource.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "auth-form" }) do |f| %>
+
+        <fieldset class="auth-group">
+          <legend>I’m joining as</legend>
+          <div class="auth-roles">
+            <label class="auth-role">
+              <span class="auth-role-title">
+                <%= f.radio_button :role, "model", checked: chosen_role == "model", required: true %>
+                Model
+              </span>
+              <span class="auth-role-blurb">Set your boundaries, get credited, host workshops.</span>
+            </label>
+            <label class="auth-role">
+              <span class="auth-role-title">
+                <%= f.radio_button :role, "photographer", checked: chosen_role == "photographer" %>
+                Photographer
+              </span>
+              <span class="auth-role-blurb">Book vetted models. Membership by review.</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="auth-group">
+          <legend>Your account</legend>
+
+          <label class="auth-field">
+            Email
+            <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                  class: "auth-input", placeholder: "you@example.com" %>
+          </label>
+
+          <div class="auth-pair">
+            <label class="auth-field">
+              Password
+              <%= f.password_field :password, autocomplete: "new-password", class: "auth-input" %>
+              <% if @minimum_password_length %>
+                <span class="auth-hint"><%= @minimum_password_length %> characters minimum</span>
+              <% end %>
+            </label>
+            <label class="auth-field">
+              Confirm password
+              <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input" %>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="auth-group">
+          <legend>Confirm</legend>
+          <%# These two are checked by the browser only; nothing is saved yet. %>
+          <label class="auth-check auth-check--top">
+            <input type="checkbox" required>
+            I’m 18 or older.
+          </label>
+          <label class="auth-check auth-check--top">
+            <input type="checkbox" required>
+            I’ll leave feedback and credit the other person after every booking, and I understand I can’t book again until I do.
+          </label>
+        </fieldset>
+
+        <%= f.submit "Create account", class: "auth-submit" %>
+      <% end %>
+
+      <div class="auth-switch">
+        <div class="auth-switch-copy">
+          <strong>Already a member?</strong>
+          <span>Sign in to see your bookings and credits.</span>
+        </div>
+        <%= link_to "Sign in", new_session_path(resource_name), class: "auth-ghost" %>
+      </div>
+    </main>
+
+    <footer class="auth-footer">
+      <span>Members only · 18+</span>
+      <span>Vetted on both sides</span>
+    </footer>
   </div>
 
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :password %></p>
-    <% if @minimum_password_length %>
-      <p><em>(<%= @minimum_password_length %> characters minimum)</em></p>
-    <% end %>
-    <p><%= f.password_field :password, autocomplete: "new-password" %></p>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :password_confirmation %></p>
-    <p><%= f.password_field :password_confirmation, autocomplete: "new-password" %></p>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+  <figure class="auth-photo auth-photo--fit">
+    <%# Blurred copy fills the panel; the sharp copy on top shows the whole photo. %>
+    <%= image_tag signup_image, alt: "", "aria-hidden": true, class: "auth-photo-fill" %>
+    <%= image_tag signup_image, alt: "", "aria-hidden": true, class: "auth-photo-main" %>
+    <figcaption class="auth-photo-caption">
+      <p>Applications are read by a person, not sorted by an algorithm.</p>
+      <span>FROM CHIAROSCURO — THE PLAY OF LIGHT AND SHADOW</span>
+    </figcaption>
+  </figure>

@@ -398,3 +398,166 @@ body.auth-body {
 @media (prefers-reduced-motion: reduce) {
   .auth-body * { transition: none !important; }
 }
+
+/* ── Sign-in welcome additions ──────────────────────────── */
+
+.auth-section-label {
+  margin: 8px 0 -4px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font: 600 12px var(--sans);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+.auth-section-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.auth-switch-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 22em;
+}
+.auth-switch-copy strong { color: var(--ivory); font-weight: 600; }
+.auth-switch-copy span { font-size: 14px; line-height: 1.5; }
+
+/* ── Sign-up + password pages ───────────────────────────── */
+
+/* Error list (Devise validation messages) */
+.auth-errors {
+  margin: 0;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(18, 16, 14, 0.9);
+  border: 1px solid rgba(217, 138, 126, 0.55);
+  color: var(--alert);
+}
+.auth-errors strong {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.auth-errors ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ivory-dim);
+}
+.auth-errors li::before { content: "— "; color: var(--alert); }
+
+/* Fieldset with a small ruled label, like "Members, sign in" */
+.auth-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.auth-group legend {
+  padding: 0;
+  margin-bottom: 14px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font: 600 12px var(--sans);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+.auth-group legend::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* Model / Photographer choice cards */
+.auth-roles { display: grid; gap: 10px; }
+@media (min-width: 400px) { .auth-roles { grid-template-columns: 1fr 1fr; } }
+
+.auth-role {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  background: rgba(22, 19, 17, 0.88);
+  border: 1px solid var(--line-strong);
+  cursor: pointer;
+  transition: border-color .15s, background-color .15s;
+}
+.auth-role:hover { border-color: var(--line-muted); }
+.auth-role:has(input:checked) {
+  border-color: var(--brass);
+  background: rgba(28, 24, 20, 0.95);
+}
+.auth-role:has(input:focus-visible) { outline: 2px solid var(--brass); outline-offset: 2px; }
+.auth-role-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ivory);
+}
+.auth-role-title input {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brass);
+  cursor: pointer;
+}
+.auth-role-blurb {
+  padding-left: 28px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--stone);
+}
+
+/* Two fields side by side once there's room */
+.auth-pair { display: grid; gap: 20px; }
+@media (min-width: 600px) { .auth-pair { grid-template-columns: 1fr 1fr; } }
+
+.auth-hint { font-size: 13px; font-weight: 400; color: var(--stone-dim); }
+
+/* Multi-line checkbox (terms) */
+.auth-check--top { align-items: flex-start; line-height: 1.55; min-height: 0; padding: 4px 0; }
+.auth-check--top input { margin-top: 3px; flex-shrink: 0; }
+
+/* Keep the italic phrase in a title together ("the light.") */
+.auth-title { text-wrap: balance; }
+.auth-title em { white-space: nowrap; }
+
+.auth-photo--fit .auth-photo-fill { display: none; }
+
+@media (min-width: 1024px) {
+  /* Blurred, darkened copy fills the whole right side. */
+  .auth-photo--fit .auth-photo-fill {
+    display: block;
+    object-fit: cover;
+    filter: blur(32px) brightness(0.4);
+    transform: scale(1.15);   /* hides the soft blurred edges */
+  }
+
+  /* The real photo, whole and uncropped, on top. */
+  .auth-photo--fit .auth-photo-main {
+    object-fit: contain;
+    object-position: 50% 50%;
+  }
+}
